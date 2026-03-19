@@ -6,7 +6,7 @@ This is a simple task management application built with Laravel for educational 
 
 - PHP 8.3 or higher
 - Composer
-- SQLite (default database)
+- MySQL (default database)
 - Node.js and npm (for frontend assets)
 
 ## Setup
