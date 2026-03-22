@@ -1,6 +1,6 @@
 <?php
 use Illuminate\Support\Facades\Route;
-
+use Symfony\Component\HttpFoundation\Response;
 
 class Task
 {
@@ -66,7 +66,11 @@ Route::get('/tasks', function () use ($tasks) {
 })->name('task.index');
 
 Route::get('/tasks/{id}', function($id) use ($tasks) {
-  $task = collect($tasks);
+  $task = collect($tasks)->firstWhere('id', $id);
+  if(!$task) {
+    abort(Response::HTTP_NOT_FOUND);
+  };
+  return view('show', ['task' => $task]);
 })->name('task.show');
 
 // Route::get('/endpoint-rusak', function() {
