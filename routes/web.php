@@ -55,15 +55,18 @@ $tasks = [
   ),
 ];
 
+Route::get('/', function() {
+  return redirect()->route('task.index');
+});
 
-Route::get('/', function () use ($tasks) {
+Route::get('/tasks', function () use ($tasks) {
     return view('index',[
         'tasks' => $tasks
     ]);
 })->name('task.index');
 
-Route::get('/{id}', function($id) {
-    return "task with id : $id";
+Route::get('/tasks/{id}', function($id) use ($tasks) {
+  $task = collect($tasks);
 })->name('task.show');
 
 // Route::get('/endpoint-rusak', function() {
