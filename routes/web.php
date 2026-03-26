@@ -1,4 +1,6 @@
 <?php
+
+use App\Http\Requests\TaskRequest;
 use Illuminate\Support\Facades\Route;
 use App\Models\Task;
 use Symfony\Component\HttpFoundation\Request;
@@ -11,7 +13,7 @@ Route::get('/', function() {
 
 Route::get('/tasks', function () {
     return view('index',[
-        'tasks' => Task::latest()->get()
+        'tasks' => Task::latest()->paginate(10)
     ]);
 })->name('tasks.index');
 
@@ -25,37 +27,31 @@ Route::get('/tasks/{task}/edit', function(Task $task) {
   return view('edit' ,['task' => $task]);
 })->name('tasks.edit');
 
-Route::post('/tasks', function(Request $request) {
-  $data = $request->validate([
-    'judul' => 'required|max:255',
-    'description' => 'required|max:555',
-    'long_description' => 'required|max:555'
-  ]);
+Route::post('/tasks', function(TaskRequest $request) {
 
-  $task = new Task;
-  $task->judul = $data['judul'];
-  $task->description = $data['description'];
-  $task->long_description = $data['long_description'];
+  $task = Task::create($request->validated());
 
-  $task->save();
   return redirect()->route('tasks.show', ['task' => $task->id])
   ->with('success', 'Task created succesfully!');
 })->name('tasks.store');
 
-Route::put('/tasks/{task}', function(Task $task, Request $request) {
-  $data = $request->validate([
-    'judul' => 'required|max:255',
-    'description' => 'required|max:555',
-    'long_description' => 'required|max:555'
-  ]);
-
-  $task->judul  = $data['judul'];
-  $task->description = $data['description'];
-  $task->long_description = $data['long_description'];
-  $task->save();
+Route::put('/tasks/{task}', function(Task $task, TaskRequest $request) {
+  
+  $task->update($request->validated());
   return redirect()->route('tasks.show', ['task' => $task->id])
-  ->with('success', 'task edit succesfully!');
-})->name('task.edit');
+  ->with('success', 'task update succesfully!');
+})->name('tasks.update');
+
+Route::delete('/tasks/{task}', function(Task $task) {
+  $task->delete();
+
+  return redirect()->route('tasks.index')
+  ->with('success', 'tasks deleted succesfully!');
+})->name('tasks.destroy');
+
+Route::put('/tasks/{id}/toggle-complete', function (Task $task) {
+  return redirect()->back()->with('success', 'tugas sudah terubah!');
+});
 
 
 // Route::get('/endpoint-rusak', function() {
