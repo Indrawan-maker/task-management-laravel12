@@ -5,8 +5,9 @@
 
 @section('content')
 <div>
-    <a href="{{ route('task.create') }}">buat tugas baru</a>
+    <a href="{{ route('tasks.create') }}">buat tugas</a>
 </div>
+
 @forelse($tasks as $task)
 <div>
     <a href="{{ route('tasks.show', ['task' => $task]) }}">{{ $task->judul }}</a>

@@ -17,7 +17,7 @@ Route::get('/tasks', function () {
     ]);
 })->name('tasks.index');
 
-Route::view('/tasks/create', 'create')->name('task.create');
+Route::view('/tasks/create', 'create')->name('tasks.create');
 
 Route::get('/tasks/{task}', function(Task $task)  {
   return view('show', ['task' => $task]);
@@ -49,9 +49,10 @@ Route::delete('/tasks/{task}', function(Task $task) {
   ->with('success', 'tasks deleted succesfully!');
 })->name('tasks.destroy');
 
-Route::put('/tasks/{id}/toggle-complete', function (Task $task) {
+Route::put('/tasks/{task}/toggle-complete', function (Task $task) {
+  $task->toggleComplete();
   return redirect()->back()->with('success', 'tugas sudah terubah!');
-});
+})->name('tasks.toggle-complete');
 
 
 // Route::get('/endpoint-rusak', function() {
